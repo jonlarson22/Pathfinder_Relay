@@ -14,8 +14,9 @@ hexChars.forEach((char, i) => {
 });
 
 const messages = {
-    north: "OTAsIDExMi41LCAyMi41LCA0NSwgNjcuNSwgOTAsIDExMi41",
-    west: "MiIuNSwgMjIuNSwgMjIuNSwgMjIuNSwgNDUsIDY3LjUsIDkwLCAxMTIuNQ=="
+    msg1: "OTAsIDExMi41LCAyMi41LCA0NSwgNjcuNSwgOTAsIDExMi41", // Original North
+    msg2: "MiIuNSwgMjIuNSwgMjIuNSwgMjIuNSwgNDUsIDY3LjUsIDkwLCAxMTIuNQ==", // Original West
+    msg3: "NDUsIDkwLCAxMzUsIDkwLCA0NQ==" // New Placeholder (Points to 2, 4, 6, 4, 2)
 };
 
 let currentHeading = 0;
@@ -26,10 +27,11 @@ async function playSequence(type) {
     if (isPlaying) return;
     isPlaying = true;
     
-    document.getElementById('btn-north').disabled = true;
-    document.getElementById('btn-west').disabled = true;
+    // Disable all buttons
+    const buttons = document.querySelectorAll('.controls button');
+    buttons.forEach(btn => btn.disabled = true);
     
-    statusText.innerText = `RECEIVING ${type.toUpperCase()} DATA...`;
+    statusText.innerText = `RECEIVING DATA STREAM: ${type.toUpperCase()}...`;
 
     // Reset rover position
     cumulativeRotation = 0;
@@ -38,16 +40,16 @@ async function playSequence(type) {
     
     await new Promise(r => setTimeout(r, 1200));
 
+    // Decode and play sequence
     const sequence = atob(messages[type]).split(',').map(num => parseFloat(num.trim()));
     
     for (let target of sequence) {
-        // If pointing at the same spot, do a 360 spin (the "Repeat" signal)
         if (target === currentHeading) {
             statusText.innerText = "CHARACTER REPEAT: CONFIRMING...";
             cumulativeRotation += 360;
             rover.style.transform = `rotate(${cumulativeRotation}deg)`;
             await new Promise(r => setTimeout(r, 1500));
-            statusText.innerText = `RECEIVING ${type.toUpperCase()} DATA...`;
+            statusText.innerText = `RECEIVING DATA...`;
         }
 
         let delta = target - currentHeading;
@@ -56,7 +58,6 @@ async function playSequence(type) {
 
         cumulativeRotation += delta;
         currentHeading = target;
-
         rover.style.transform = `rotate(${cumulativeRotation}deg)`;
         
         await new Promise(r => setTimeout(r, 2500));
@@ -64,6 +65,5 @@ async function playSequence(type) {
     
     statusText.innerText = "TRANSMISSION COMPLETE.";
     isPlaying = false;
-    document.getElementById('btn-north').disabled = false;
-    document.getElementById('btn-west').disabled = false;
+    buttons.forEach(btn => btn.disabled = false);
 }
