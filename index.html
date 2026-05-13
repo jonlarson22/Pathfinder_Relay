@@ -1,66 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pathfinder Recovery Mission</title>
-    <style>
-        body { 
-            background-color: #2b0d02; color: #f4a460; 
-            font-family: 'Courier New', Courier, monospace;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; margin: 0;
-        }
-        
-        #mars-base {
-            position: relative;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, #8b4513 0%, #2b0d02 80%);
-            border-radius: 50%;
-            border: 2px solid #5d2906;
-            margin-bottom: 20px;
-        }
-
-        .hex-char {
-            position: absolute;
-            left: 50%; top: 50%;
-            width: 30px; height: 30px;
-            margin-left: -15px; margin-top: -15px;
-            text-align: center;
-            font-size: 22px; font-weight: bold;
-        }
-
-        #rover-anchor {
-            position: absolute;
-            left: 50%; top: 50%;
-            width: 60px; height: 60px;
-            margin-left: -30px; margin-top: -30px;
-            transition: transform 1.2s ease-in-out;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 10;
-        }
-
-        #rover-sprite {
-            font-size: 50px;
-            transform: rotate(-45deg); 
-        }
-
-        .controls {
-            display: flex; gap: 15px;
-        }
-
-        button {
-            padding: 15px 25px;
-            background: #5d2906; color: #f4a460; border: 2px solid #f4a460;
-            cursor: pointer; font-family: inherit; font-weight: bold;
-        }
-
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        #status {
-            margin-top: 15px;
-            letter-spacing: 2px;
-            height: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
@@ -80,77 +25,6 @@
 
     <p id="status">STANDING BY...</p>
 
-    <script>
-    const ring = document.getElementById('ring');
-    const rover = document.getElementById('rover-anchor');
-    const statusText = document.getElementById('status');
-    const hexChars = "0123456789ABCDEF".split("");
-    
-    hexChars.forEach((char, i) => {
-        const angle = i * 22.5; 
-        const el = document.createElement('div');
-        el.className = 'hex-char';
-        el.innerText = char;
-        el.style.transform = `rotate(${angle}deg) translateY(-170px) rotate(-${angle}deg)`;
-        ring.appendChild(el);
-    });
-
-    const messages = {
-        north: "OTAsIDExMi41LCAyMi41LCA0NSwgNjcuNSwgOTAsIDExMi41",
-        west: "MiIuNSwgMjIuNSwgMjIuNSwgMjIuNSwgNDUsIDY3LjUsIDkwLCAxMTIuNQ=="
-    };
-
-    let currentHeading = 0;
-    let cumulativeRotation = 0;
-    let isPlaying = false;
-
-    async function playSequence(type) {
-        if (isPlaying) return;
-        isPlaying = true;
-        
-        document.getElementById('btn-north').disabled = true;
-        document.getElementById('btn-west').disabled = true;
-        
-        statusText.innerText = `RECEIVING ${type.toUpperCase()} DATA...`;
-
-        // Reset to 0
-        cumulativeRotation = 0;
-        currentHeading = 0;
-        rover.style.transform = `rotate(0deg)`;
-        
-        await new Promise(r => setTimeout(r, 1200));
-
-        const sequence = atob(messages[type]).split(',').map(num => parseFloat(num.trim()));
-        
-        for (let target of sequence) {
-            // CHECK FOR REPEAT: If pointing at the same spot, do a 360 spin
-            if (target === currentHeading) {
-                statusText.innerText = "CHARACTER REPEAT: CONFIRMING...";
-                cumulativeRotation += 360; // Add a full circle
-                rover.style.transform = `rotate(${cumulativeRotation}deg)`;
-                
-                // Wait for the spin to finish
-                await new Promise(r => setTimeout(r, 1500));
-                statusText.innerText = `RECEIVING ${type.toUpperCase()} DATA...`;
-            }
-
-            let delta = target - currentHeading;
-            if (delta > 180) delta -= 360;
-            if (delta < -180) delta += 360;
-
-            cumulativeRotation += delta;
-            currentHeading = target;
-
-            rover.style.transform = `rotate(${cumulativeRotation}deg)`;
-            
-            await new Promise(r => setTimeout(r, 2500));
-        }
-        
-        statusText.innerText = "TRANSMISSION COMPLETE.";
-        isPlaying = false;
-        document.getElementById('btn-north').disabled = false;
-        document.getElementById('btn-west').disabled = false;
-    }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
