@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathfinder Recovery Mission</title>
+    <title>Pathfinder Communication Relay</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-    <h2>SOL 97: PATHFINDER_COMMUNICATION_RELAY</h2>
-    
+    <h2 id="sol-title">SOL 97: PATHFINDER_COMMUNICATION_RELAY</h2>
+
+    <!-- Visual Overhaul - Landscape elements -->
+    <img src="images/habs_illustration.jpg" id="habs" class="scene-element" alt="Habitat Modules">
+    <img src="images/astronaut_illustration.png" id="astronaut" class="scene-element" alt="Astronaut">
+    <img src="images/rover_illustration.png" id="main-rover" class="scene-element" alt="Main Rover">
+
     <div id="mars-base">
+        <!-- New textured dirt base and border -->
+        <div id="dial-rim"></div>
         <div id="rover-anchor">
-            <div id="rover-sprite">🚀</div>
+            <!-- Pathfinder Miniature replaces rocket -->
+            <img src="images/pathfinder_miniature.jpg" id="rover-sprite" alt="Pathfinder Lander and Sojourner">
         </div>
         <div id="ring"></div>
     </div>
@@ -24,7 +32,7 @@
         <button id="btn-3" onclick="playSequence('msg3')">RECEIVE MESSAGE 3</button>
     </div>
 
-    <p id="status">STANDING BY...</p>
+    <p id="status">TRANSMISSION COMPLETE.</p>
 
     <script src="script.js"></script>
 </body>
