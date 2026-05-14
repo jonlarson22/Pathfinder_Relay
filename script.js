@@ -36,36 +36,32 @@ function playBeep() {
     osc.stop(audioCtx.currentTime + 0.1);
 }
 
-// 3. Continuous Static
-function createStatic() {
-    const bufferSize = 2 * audioCtx.sampleRate;
-    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const output = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
-    const whiteNoise = audioCtx.createBufferSource();
-    whiteNoise.buffer = noiseBuffer;
-    whiteNoise.loop = true;
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 1000;
-    const gain = audioCtx.createGain();
-    gain.gain.value = 0.15; 
-    whiteNoise.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioCtx.destination);
-    return { source: whiteNoise, gain: gain };
-}
-
-// 4. Motor Whirring
+// 3. Motor Whirring
 function createMotor() {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = 'sawtooth'; // Gives it a gritty, mechanical feel
-    osc.frequency.setValueAtTime(120, audioCtx.currentTime); // Low pitch
-    gain.gain.setValueAtTime(0.03, audioCtx.currentTime); // Keep it quiet
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(110, audioCtx.currentTime); // Gritty motor pitch
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime); // Slightly louder since static is gone
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    return { source: osc, gain: gain };
+    return osc;
+}
+
+let activeMotor = null;
+
+function startMotor() {
+    if (!activeMotor) {
+        activeMotor = createMotor();
+        activeMotor.start();
+    }
+}
+
+function stopMotor() {
+    if (activeMotor) {
+        activeMotor.stop();
+        activeMotor = null;
+    }
 }
 
 // INITIALIZE RING
@@ -94,61 +90,51 @@ let isPlaying = false;
 function bootSystem() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
     
-    // Hide the boot screen overlay
     const bootScreen = document.getElementById('boot-screen');
     bootScreen.style.opacity = '0';
     setTimeout(() => bootScreen.style.display = 'none', 500);
 
     const titleEl = document.getElementById('sol-title');
     const uiContainer = document.getElementById('ui-container');
-    const titleText = "SOL 97: PATHFINDER_COMMS_RELAY"; // Shortened Title
+    const titleText = "SOL 97: PATHFINDER_COMMS_RELAY";
     let i = 0;
 
     function typeWriter() {
         if (i < titleText.length) {
             titleEl.innerHTML += titleText.charAt(i);
-            playClick(); // Plays the click sound for each character
+            playClick(); 
             i++;
-            setTimeout(typeWriter, 60); 
+            setTimeout(typeWriter, 120); // SLOWED TO HALF SPEED
         } else {
-            setTimeout(() => {
-                uiContainer.style.opacity = 1; 
-            }, 500);
+            setTimeout(() => { uiContainer.style.opacity = 1; }, 500);
         }
     }
-
-    // Wait a brief moment after hiding boot screen to start typing
     setTimeout(typeWriter, 400);
 }
 
 async function playSequence(type) {
     if (isPlaying) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
     isPlaying = true;
     
     const buttons = document.querySelectorAll('.controls button');
     buttons.forEach(btn => btn.disabled = true);
     statusText.innerText = `RECEIVING DATA STREAM...`;
 
+    // RESET TO ZERO (With Motor Whir)
+    startMotor();
     cumulativeRotation = 0;
     currentHeading = 0;
     rover.style.transform = `rotate(0deg)`;
-    
     await new Promise(r => setTimeout(r, 1200));
-
+    stopMotor(); // Stop briefly at home
+    
     const sequence = atob(messages[type]).split(',').map(num => parseFloat(num.trim()));
     
-    // START STATIC: Plays continuously for the whole sequence
-    const staticAudio = createStatic();
-    staticAudio.source.start(); 
-    
     for (let target of sequence) {
+        await new Promise(r => setTimeout(r, 200)); // Short pause before next move
         
-        // START MOTOR for movement
-        const motorAudio = createMotor();
-        motorAudio.source.start();
+        startMotor();
 
-        // Movement logic
         let delta = target - currentHeading;
         if (delta > 180) delta -= 360;
         if (delta < -180) delta += 360;
@@ -156,15 +142,11 @@ async function playSequence(type) {
         currentHeading = target;
         rover.style.transform = `rotate(${cumulativeRotation}deg)`;
         
-        // Wait for movement (1.2s is the CSS transition time)
         await new Promise(r => setTimeout(r, 1200));
         
-        // STOP MOTOR when stopped
-        motorAudio.source.stop(); 
-        
-        playBeep(); // Confirmation beep
+        stopMotor(); 
+        playBeep();
 
-        // Trigger Glow
         const charIndex = (target / 22.5) % 16;
         const charElement = document.getElementById(`char-${charIndex}`);
         if (charElement) {
@@ -174,9 +156,6 @@ async function playSequence(type) {
         
         await new Promise(r => setTimeout(r, 1300)); 
     }
-    
-    // STOP STATIC at the very end
-    staticAudio.source.stop();
     
     statusText.innerText = "TRANSMISSION COMPLETE.";
     isPlaying = false;
