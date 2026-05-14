@@ -1,20 +1,19 @@
 body { 
     margin: 0;
     padding: 0;
-    background-color: #2b0d02; /* Fallback */
+    background-color: #2b0d02;
     color: #f4a460; 
     font-family: 'Courier New', Courier, monospace;
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    justify-content: flex-start; /* Keeps things pulled toward the top */
-    height: 100vh; /* Locks height */
+    justify-content: center;
+    height: 100vh;
     width: 100vw;
-    overflow: hidden; /* COMPLETELY PREVENTS SCROLLING */
+    overflow: hidden;
     position: relative;
 }
 
-/* FIX: This pseudo-element stops the mobile background resizing glitch */
 body::before {
     content: "";
     position: absolute;
@@ -24,168 +23,85 @@ body::before {
         url('images/pathfind_mars_photo.png'); 
     background-size: cover;
     background-position: center;
-    z-index: -1; /* Puts it behind everything */
+    z-index: -1;
 }
-
-/* --- THE BOOT SCREEN --- */
-#boot-screen {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    cursor: pointer;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 0 0 10px #f4a460;
-}
-
-.blink { animation: blinker 1.2s linear infinite; margin-top: 20px;}
-@keyframes blinker { 50% { opacity: 0; } }
 
 #sol-title {
-    margin-top: 15px; /* Tighter spacing */
-    margin-bottom: 10px; /* Tighter spacing */
-    font-size: 32px; 
+    font-size: 4vh; /* Dynamic size */
     text-align: center;
     text-transform: uppercase;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    padding: 0 10px;
-    min-height: 40px; 
-    z-index: 10;
-}
-
-#ui-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    opacity: 0; 
-    transition: opacity 1.5s ease-in; 
-    width: 100%;
+    min-height: 5vh; 
+    margin-bottom: 2vh;
 }
 
 #mars-base {
     position: relative;
-    width: 450px; 
-    height: 450px;
+    width: 60vh; /* Scaled to screen height */
+    height: 60vh;
+    max-width: 90vw;
+    max-height: 90vw;
     background: radial-gradient(circle, rgba(163, 78, 44, 0.3) 10%, rgba(43, 13, 2, 0.5) 80%);
     border-radius: 50%;
-    margin-bottom: 15px;
+    margin-bottom: 2vh;
     box-shadow: 0 0 20px rgba(244, 164, 96, 0.4);
     border: 3px solid rgba(244, 164, 96, 0.6);
 }
 
-.hex-char {
+/* Pathfinder Body Placeholder */
+#pathfinder-body {
     position: absolute;
-    left: 50%; 
-    top: 50%;
-    width: 38px; 
-    height: 38px;
-    margin-left: -19px; 
-    margin-top: -19px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px; 
-    font-weight: bold;
-    color: #ffd8a8; 
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    background: rgba(43, 13, 2, 0.7); 
-    border-radius: 4px;
-    border: 1px solid rgba(255, 216, 168, 0.3);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    z-index: 5;
+    opacity: 0.8;
 }
 
-#status-container {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 10px 30px;
-    border-radius: 50px;
-    border: 1px solid rgba(244, 164, 96, 0.3);
-    backdrop-filter: blur(5px);
-}
+#pathfinder-body img { width: 100%; height: auto; }
 
-#camera-sprite {
-    font-size: 60px;
+#camera-sprite img {
+    width: 12vh;
+    height: auto;
     filter: drop-shadow(0 0 10px #f4a460);
 }
 
 #rover-anchor {
     position: absolute;
-    left: 50%; 
-    top: 50%;
-    width: 130px;
-    height: 130px;
-    margin-left: -65px; 
-    margin-top: -65px;
+    left: 50%; top: 50%;
+    width: 20vh; height: 20vh;
+    margin-left: -10vh; margin-top: -10vh;
     transition: transform 1.2s ease-in-out;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     z-index: 10;
+}
+
+.hex-char {
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 5vh; height: 5vh;
+    margin-left: -2.5vh; margin-top: -2.5vh;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5vh;
+    font-weight: bold;
+    color: #ffd8a8; 
+    background: rgba(43, 13, 2, 0.7); 
+    border-radius: 4px;
+    border: 1px solid rgba(255, 216, 168, 0.3);
 }
 
 .controls {
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-    width: 280px;
-    margin-bottom: 15px;
-    z-index: 10;
+    display: flex; gap: 10px; width: auto; margin-bottom: 2vh;
 }
 
 button {
-    padding: 10px; 
-    background: #3e1b0a; 
-    color: #f4a460; 
-    border: 2px solid #f4a460;
-    cursor: pointer; 
-    font-family: inherit; 
-    font-weight: bold;
-    text-transform: uppercase;
-    font-size: 14px;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    padding: 10px 20px;
+    background: #3e1b0a; color: #f4a460; border: 2px solid #f4a460;
+    cursor: pointer; font-family: inherit; font-size: 1.5vh;
 }
 
-button:active { transform: translateY(2px); }
-
-#status {
-    margin: 0;
-    color: #ffd8a8;
-    font-weight: bold;
-    letter-spacing: 3px;
-    text-shadow: 0 0 8px rgba(255, 216, 168, 0.8);
-}
-
-.glow-active {
-    animation: character-pulse 0.625s ease-in-out;
-}
-
-@keyframes character-pulse {
-    0% { background: rgba(43, 13, 2, 0.7); border-color: rgba(255, 216, 168, 0.3); }
-    50% { 
-        background: rgba(163, 78, 44, 0.5); 
-        border-color: rgba(244, 164, 96, 0.5); 
-        box-shadow: 0 0 6px rgba(244, 164, 96, 0.4); 
-    }
-    100% { background: rgba(43, 13, 2, 0.7); border-color: rgba(255, 216, 168, 0.3); }
-}
-
-/* --- MOBILE TIGHTENING --- */
 @media (max-width: 600px) {
-    #boot-screen { font-size: 18px; }
-    #sol-title { font-size: 20px; margin-top: 15px; margin-bottom: 5px; min-height: 25px; }
-    
-    #mars-base { width: 310px; height: 310px; margin-bottom: 15px;}
-     
-    .hex-char { width: 26px; height: 26px; font-size: 16px; }
-    #camera-sprite { font-size: 45px; }
-    
-    .controls { gap: 6px; width: 250px; margin-bottom: 10px; }
-    button { padding: 8px; font-size: 12px; }
-    
-    #status-container { padding: 8px 20px; }
-    #status { font-size: 14px; }
+    .controls { flex-direction: column; width: 80vw; }
+    #mars-base { width: 40vh; height: 40vh; }
+    .hex-char { width: 4vh; height: 4vh; font-size: 2vh; }
 }
