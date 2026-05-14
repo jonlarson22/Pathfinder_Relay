@@ -18,13 +18,18 @@
     <h2 id="sol-title"></h2>
 
     <div id="ui-container">
-        <div id="mars-base">
-            <div id="dial-rim"></div>
-            <div id="rover-anchor">
-                <div id="camera-sprite">📷</div> 
-            </div>
-            <div id="ring"></div>
+       <div id="mars-base">
+        <div id="dial-rim"></div>
+        
+        <!-- STATIC LANDER (Underneath the camera) -->
+        <img src="images/pathfinder_lander_base.png" id="lander-base" alt="Pathfinder Lander">
+    
+        <div id="rover-anchor">
+            <!-- CUSTOM CAMERA IMAGE -->
+            <img src="images/rover_camera_top.png" id="camera-sprite" alt="Camera"> 
         </div>
+        <div id="ring"></div>
+    </div>
 
         <div class="controls">
             <button id="btn-1" onclick="playSequence('msg1')">RECEIVE MESSAGE 1</button>
