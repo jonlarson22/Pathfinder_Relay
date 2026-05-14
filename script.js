@@ -31,7 +31,10 @@ function createStatic() {
     filter.type = 'bandpass';
     filter.frequency.value = 1000;
     const gain = audioCtx.createGain();
-    gain.gain.value = 0.02; // Very subtle
+    
+    // LOUDER STATIC: Increased from 0.02 to 0.15
+    gain.gain.value = 0.15; 
+    
     whiteNoise.connect(filter);
     filter.connect(gain);
     gain.connect(audioCtx.destination);
@@ -59,6 +62,29 @@ const messages = {
 let currentHeading = 0;
 let cumulativeRotation = 0;
 let isPlaying = false;
+
+// --- TYPEWRITER INTRO SEQUENCE ---
+window.onload = () => {
+    const titleEl = document.getElementById('sol-title');
+    const uiContainer = document.getElementById('ui-container');
+    const titleText = "SOL 97: PATHFINDER_COMMUNICATION_RELAY";
+    let i = 0;
+
+    function typeWriter() {
+        if (i < titleText.length) {
+            titleEl.innerHTML += titleText.charAt(i);
+            i++;
+            setTimeout(typeWriter, 60); // Speed of typing
+        } else {
+            setTimeout(() => {
+                uiContainer.style.opacity = 1; // Fades in the UI
+            }, 500);
+        }
+    }
+
+    // Wait 1 second after page loads before starting the typing
+    setTimeout(typeWriter, 1000);
+};
 
 async function playSequence(type) {
     if (isPlaying) return;
