@@ -165,17 +165,39 @@ button:active { transform: translateY(2px); }
     text-shadow: 0 0 8px rgba(255, 216, 168, 0.8);
 }
 
-/* --- MOBILE RESPONSIVENESS --- */
+/* THE GLOW EFFECT */
+.glow-active {
+    animation: character-pulse 0.625s ease-in-out; /* 1/4 of 2.5s */
+}
+
+@keyframes character-pulse {
+    0% { background: rgba(43, 13, 2, 0.7); border-color: rgba(255, 216, 168, 0.3); }
+    50% { 
+        background: rgba(244, 164, 96, 0.4); 
+        border-color: rgba(244, 164, 96, 1);
+        box-shadow: 0 0 15px rgba(244, 164, 96, 0.8);
+    }
+    100% { background: rgba(43, 13, 2, 0.7); border-color: rgba(255, 216, 168, 0.3); }
+}
+
+/* --- MOBILE RESPONSIVENESS (FIXED) --- */
 @media (max-width: 600px) {
+    #mars-base { width: 320px; height: 320px; }
+    
     .scene-element { width: 100px !important; opacity: 0.4; }
     #pathfinder-corner { top: 2%; right: 2%; }
-}
+    #habs { width: 150px; top: 5%; }
+    #main-rover { width: 120px; bottom: 15%; }
+    #astronaut { width: 60px; bottom: 10%; }
     
     .hex-char {
         width: 28px;
         height: 28px;
         font-size: 18px;
     }
+    
+    #sol-title { font-size: 18px; }
+}
     
     /* Adjusting the character distance for the smaller circle */
     /* This script logic handles the rotation, but CSS handles the 'offset' */
