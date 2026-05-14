@@ -8,20 +8,27 @@
 </head>
 <body>
 
-    <!-- NEW: Boot screen to bypass browser audio-blocking -->
     <div id="boot-screen" onclick="bootSystem()">
         <p>INCOMING TRANSMISSION...</p>
         <p class="blink">[ TAP TO INITIALIZE ]</p>
     </div>
 
-    <!-- Empty for the Typewriter effect -->
     <h2 id="sol-title"></h2>
 
     <div id="ui-container">
         <div id="mars-base">
+            <!-- Pathinder Body (Static, Center) -->
+            <div id="pathfinder-body">
+                <img src="images/pathfinder_static.png" alt="Pathfinder" onerror="this.style.display='none'">
+            </div>
+
             <div id="dial-rim"></div>
+            
+            <!-- Rotating Camera Assembly -->
             <div id="rover-anchor">
-                <div id="camera-sprite">📷</div> 
+                <div id="camera-sprite">
+                    <img src="images/camera_custom.png" alt="Camera" onerror="this.parentElement.innerText='📷'">
+                </div> 
             </div>
             <div id="ring"></div>
         </div>
