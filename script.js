@@ -75,8 +75,8 @@ function positionCharacters() {
 
     chars.forEach((el, i) => {
         const angle = i * 22.5; 
-        // We use the calculated radius here
-        el.style.transform = `rotate(${angle}deg) translateY(-${radius}px) rotate(-${angle}deg)`;
+        // FIX: Added translate(-50%, -50%) to the start of the string
+        el.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-${radius}px) rotate(-${angle}deg)`;
     });
 }
 
@@ -143,14 +143,17 @@ async function playSequence(type) {
     startMotor();
     cumulativeRotation = 0;
     currentHeading = 0;
-    rover.style.transform = `rotate(0deg)`;
+    
+    // FIX: Add translate(-50%, -50%)
+    rover.style.transform = `translate(-50%, -50%) rotate(0deg)`; 
+    
     await new Promise(r => setTimeout(r, 1200));
     stopMotor(); // Stop briefly at home
     
     const sequence = atob(messages[type]).split(',').map(num => parseFloat(num.trim()));
     
     for (let target of sequence) {
-        await new Promise(r => setTimeout(r, 200)); // Short pause before next move
+        await new Promise(r => setTimeout(r, 200)); 
         
         startMotor();
 
@@ -159,10 +162,11 @@ async function playSequence(type) {
         if (delta < -180) delta += 360;
         cumulativeRotation += delta;
         currentHeading = target;
-        rover.style.transform = `rotate(${cumulativeRotation}deg)`;
+        
+        // FIX: Add translate(-50%, -50%)
+        rover.style.transform = `translate(-50%, -50%) rotate(${cumulativeRotation}deg)`;
         
         await new Promise(r => setTimeout(r, 1200));
-        
         stopMotor(); 
         playBeep();
 
