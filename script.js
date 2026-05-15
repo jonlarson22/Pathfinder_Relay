@@ -103,8 +103,12 @@ let isPlaying = false;
 window.addEventListener('load', positionCharacters);
 window.addEventListener('resize', positionCharacters);
 
-function bootSystem() {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+// ADD "async" HERE
+async function bootSystem() {
+    // FORCE the code to wait until the audio engine is 100% awake
+    if (audioCtx.state === 'suspended') {
+        await audioCtx.resume(); 
+    }
     
     const bootScreen = document.getElementById('boot-screen');
     bootScreen.style.opacity = '0';
@@ -120,7 +124,7 @@ function bootSystem() {
             titleEl.innerHTML += titleText.charAt(i);
             playClick(); 
             i++;
-            // SPEED: 90ms is halfway between 60 and 120
+            // SPEED: 90ms
             setTimeout(typeWriter, 90); 
         } else {
             // Make sure characters are positioned before showing UI
@@ -128,6 +132,8 @@ function bootSystem() {
             setTimeout(() => { uiContainer.style.opacity = 1; }, 500);
         }
     }
+    
+    // Give it a tiny bit of breathing room before typing
     setTimeout(typeWriter, 400);
 }
 
