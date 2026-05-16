@@ -70,11 +70,10 @@ body::before {
 /* --- RESPONSIVE DIAL --- */
 #mars-base {
     position: relative;
-    /* Uses vmin to ensure it fits both tall and wide screens */
-    width: 75vmin;   
-    height: 75vmin;  
-    max-width: 650px; /* Increased for better Desktop visibility */
-    max-height: 650px;
+    width: 80vmin; /* Slightly larger base size */   
+    height: 80vmin;  
+    max-width: 850px; /* Increased from 650px to let it grow on desktop */
+    max-height: 850px;
     background: radial-gradient(circle, rgba(163, 78, 44, 0.3) 10%, rgba(43, 13, 2, 0.5) 80%);
     border-radius: 50%;
     margin-bottom: 2vh;
@@ -122,19 +121,14 @@ body::before {
 
 .hex-char {
     position: absolute;
-    /* ADD THESE TWO LINES TO START AT THE CENTER */
     top: 50%;
     left: 50%;
-    
-    /* Sizes now scale with the dial */
-    width: 6vmin; 
-    height: 6vmin;
-    max-width: 40px;
-    max-height: 40px;
+    width: 8%; /* 8% of the dial width - perfectly scales! */
+    height: 8%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3vmin; 
+    font-size: clamp(14px, 2.5vw, 24px); /* Keeps text legible at all sizes */
     font-weight: bold;
     color: #ffd8a8; 
     background: rgba(43, 13, 2, 0.8); 
@@ -227,4 +221,33 @@ button:active { transform: translateY(2px); }
     
     #status-container { padding: 8px 20px; }
     #status { font-size: 14px; }
+}
+
+/* --- DESKTOP WIDE SCREEN LAYOUT --- */
+@media (min-width: 850px) {
+    #ui-container {
+        flex-direction: row; /* Puts the dial and the control panel side-by-side */
+        justify-content: center;
+        align-items: center;
+        gap: 6vw; /* Creates nice breathing room between the dial and buttons */
+        height: 75vh; /* Takes up most of the vertical space */
+    }
+
+    #mars-base {
+        margin-bottom: 0; /* Removes mobile spacing */
+        /* Switch to vh so the dial maximizes its use of the screen height */
+        width: 75vh; 
+        height: 75vh;
+    }
+
+    #control-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .controls {
+        margin-bottom: 0; /* Removes mobile spacing */
+    }
 }
