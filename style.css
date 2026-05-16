@@ -91,16 +91,33 @@ body::before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 45%; /* Relative to the dial size */
+    width: 50%; /* Relative to the dial size */
     z-index: 5;
     pointer-events: none;
+    -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 70%);
+    mask-image: radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 70%);
 }
 
 /* THE ROTATING CAMERA */
 #camera-sprite {
-    width: 100%; /* Adjust based on your image dimensions */
+    width: 55px; /* Drastically shrinks the camera footprint */
     height: auto;
     filter: drop-shadow(0 0 10px #f4a460);
+}
+
+/* THE MARTIAN POINTER STICK */
+#rover-anchor::after {
+    content: '';
+    position: absolute;
+    bottom: 50%; /* Starts exactly at the center of the camera and grows UP */
+    left: 50%;
+    width: 3px; /* Thickness of the stick */
+    height: 28vmin; /* Uses vmin so it grows/shrinks perfectly with the ring */
+    max-height: 220px; /* Keeps it from getting too long on giant monitors */
+    background-color: #ff4500; /* Neon Mars orange/red for high visibility */
+    transform: translateX(-50%);
+    box-shadow: 0 0 8px rgba(255, 73, 0, 0.9); /* Sci-fi glow */
+    z-index: -1; /* Puts the stick underneath the camera graphic */
 }
 
 .hex-char {
