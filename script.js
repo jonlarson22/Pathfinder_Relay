@@ -66,7 +66,6 @@ function stopMotor() {
 
 // DYNAMIC POSITIONING FOR CHARACTERS
 function positionCharacters() {
-    const ring = document.getElementById('ring');
     const container = document.getElementById('mars-base');
     const chars = document.querySelectorAll('.hex-char');
     
@@ -89,7 +88,7 @@ hexChars.forEach((char, i) => {
 
 const messages = {
     msg1: "OTAsIDExMi41LCAyMi41LCA0NSwgNjcuNSwgOTAsIDExMi41",
-    msg2: "MiIuNSwgMjIuNSwgMjIuNSwgMjIuNSwgNDUsIDY3LjUsIDkwLCAxMTIuNQ==",
+    msg2: "MjIuNSwgMjIuNSwgMjIuNSwgMjIuNSwgNDUsIDY3LjUsIDkwLCAxMTIuNQ==",
     msg3: "NDUsIDkwLCAxMzUsIDkwLCA0NQ=="
 };
 
@@ -111,15 +110,14 @@ async function bootSystem() {
 
     const titleEl = document.getElementById('sol-title');
     const uiContainer = document.getElementById('ui-container');
-    const titleText = "ARES III MISSION - SOL 97<BR>PATHFINDER_COMMS_RELAY_TEST";
+    const titleText = "ARES III MISSION - SOL 97<BR>PATHFINDER COMMS RELAY TEST";
     let i = 0;
 
     function typeWriter() {
         if (i < titleText.length) {
-            // FIX: Check if upcoming text block is our line break HTML tag
             if (titleText.slice(i, i + 4) === '<BR>') {
                 titleEl.innerHTML += '<br>';
-                i += 4; // Advance past the whole tag at once
+                i += 4; 
             } else {
                 titleEl.innerHTML += titleText.charAt(i);
                 i++;
@@ -171,7 +169,8 @@ async function playSequence(type) {
         stopMotor(); 
         playBeep();
 
-        const charIndex = (target / 22.5) % 16;
+        // FIX: Math.round keeps decimal divisions from generating broken fractional IDs
+        const charIndex = Math.round(target / 22.5) % 16;
         const charElement = document.getElementById(`char-${charIndex}`);
         if (charElement) {
             charElement.classList.add('glow-active');
@@ -181,7 +180,7 @@ async function playSequence(type) {
         await new Promise(r => setTimeout(r, 1300)); 
     }
     
-    statusText.innerText = "TRANSMISSION COMPLETE.";
+    statusText.innerText = "TRANSMISSION COMPLETE";
     isPlaying = false;
     buttons.forEach(btn => btn.disabled = false);
 }
