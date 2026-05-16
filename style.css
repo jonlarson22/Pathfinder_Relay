@@ -72,8 +72,8 @@ body::before {
     position: relative;
     width: 80vmin; /* Slightly larger base size */   
     height: 80vmin;  
-    max-width: 850px; /* Increased from 650px to let it grow on desktop */
-    max-height: 850px;
+    max-width: 900px; /* Increased from 650px to let it grow on desktop */
+    max-height: 900px;
     background: radial-gradient(circle, rgba(163, 78, 44, 0.3) 10%, rgba(43, 13, 2, 0.5) 80%);
     border-radius: 50%;
     margin-bottom: 2vh;
@@ -90,8 +90,9 @@ body::before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%; /* Relative to the dial size */
-    z-index: 5;
+    width: 65%; /* Relative to the dial size */
+    height: auto;
+    z-index: 1;
     pointer-events: none;
     -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 70%);
     mask-image: radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 70%);
@@ -99,7 +100,7 @@ body::before {
 
 /* THE ROTATING CAMERA */
 #camera-sprite {
-    width: 55px; /* Drastically shrinks the camera footprint */
+    width: 90%; /* Drastically shrinks the camera footprint */
     height: auto;
     filter: drop-shadow(0 0 10px #f4a460);
 }
@@ -111,8 +112,8 @@ body::before {
     bottom: 50%; /* Starts exactly at the center of the camera and grows UP */
     left: 50%;
     width: 3px; /* Thickness of the stick */
-    height: 20vmin; /* Uses vmin so it grows/shrinks perfectly with the ring */
-    max-height: 200px; /* Keeps it from getting too long on giant monitors */
+    height: 25vmin; /* Uses vmin so it grows/shrinks perfectly with the ring */
+    max-height: 250px; /* Keeps it from getting too long on giant monitors */
     background: linear-gradient(to right, #888888, #ffffff 30%, #cccccc 70%, #777777);
     transform: translateX(-50%);
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
@@ -143,6 +144,13 @@ body::before {
     border-radius: 50px;
     border: 1px solid rgba(244, 164, 96, 0.3);
     backdrop-filter: blur(5px);
+    height: 60px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto; 
 }
 
 #rover-anchor {
@@ -189,11 +197,12 @@ button:active { transform: translateY(2px); }
     color: #ffd8a8;
     font-weight: bold;
     letter-spacing: 3px;
+    text-align: center;
     text-shadow: 0 0 8px rgba(255, 216, 168, 0.8);
 }
 
 .glow-active {
-    animation: character-pulse 0.625s ease-in-out;
+    animation: character-pulse 0.5s ease-in-out;
 }
 
 @keyframes character-pulse {
