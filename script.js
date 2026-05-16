@@ -14,7 +14,7 @@ function playClick() {
     osc.type = 'square';
     osc.frequency.setValueAtTime(150, audioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.05);
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime); // Very short, quiet click
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
@@ -70,12 +70,10 @@ function positionCharacters() {
     const container = document.getElementById('mars-base');
     const chars = document.querySelectorAll('.hex-char');
     
-    // Calculate radius: 42% of the container width keeps them safely inside the edge
     const radius = container.offsetWidth * 0.42; 
 
     chars.forEach((el, i) => {
         const angle = i * 22.5; 
-        // FIX: Added translate(-50%, -50%) to the start of the string
         el.style.transform = `translate(-50%, -50%) rotate(${angle}deg) translateY(-${radius}px) rotate(-${angle}deg)`;
     });
 }
@@ -99,13 +97,10 @@ let currentHeading = 0;
 let cumulativeRotation = 0;
 let isPlaying = false;
 
-// Run positioning on load and if window resizes
 window.addEventListener('load', positionCharacters);
 window.addEventListener('resize', positionCharacters);
 
-// ADD "async" HERE
 async function bootSystem() {
-    // FORCE the code to wait until the audio engine is 100% awake
     if (audioCtx.state === 'suspended') {
         await audioCtx.resume(); 
     }
@@ -116,24 +111,27 @@ async function bootSystem() {
 
     const titleEl = document.getElementById('sol-title');
     const uiContainer = document.getElementById('ui-container');
-    const titleText = "ARES III MISSON - SOL 97<BR>PATHFINDER_COMMS_RELAY_TEST";
+    const titleText = "ARES III MISSION - SOL 97<BR>PATHFINDER_COMMS_RELAY_TEST";
     let i = 0;
 
     function typeWriter() {
         if (i < titleText.length) {
-            titleEl.innerHTML += titleText.charAt(i);
+            // FIX: Check if upcoming text block is our line break HTML tag
+            if (titleText.slice(i, i + 4) === '<BR>') {
+                titleEl.innerHTML += '<br>';
+                i += 4; // Advance past the whole tag at once
+            } else {
+                titleEl.innerHTML += titleText.charAt(i);
+                i++;
+            }
             playClick(); 
-            i++;
-            // SPEED: 90ms
             setTimeout(typeWriter, 90); 
         } else {
-            // Make sure characters are positioned before showing UI
             positionCharacters();
             setTimeout(() => { uiContainer.style.opacity = 1; }, 500);
         }
     }
     
-    // Give it a tiny bit of breathing room before typing
     setTimeout(typeWriter, 400);
 }
 
@@ -145,16 +143,14 @@ async function playSequence(type) {
     buttons.forEach(btn => btn.disabled = true);
     statusText.innerText = `RECEIVING DATA STREAM...`;
 
-    // RESET TO ZERO (With Motor Whir)
     startMotor();
     cumulativeRotation = 0;
     currentHeading = 0;
     
-    // FIX: Add translate(-50%, -50%)
     rover.style.transform = `translate(-50%, -50%) rotate(0deg)`; 
     
     await new Promise(r => setTimeout(r, 1200));
-    stopMotor(); // Stop briefly at home
+    stopMotor(); 
     
     const sequence = atob(messages[type]).split(',').map(num => parseFloat(num.trim()));
     
@@ -169,7 +165,6 @@ async function playSequence(type) {
         cumulativeRotation += delta;
         currentHeading = target;
         
-        // FIX: Add translate(-50%, -50%)
         rover.style.transform = `translate(-50%, -50%) rotate(${cumulativeRotation}deg)`;
         
         await new Promise(r => setTimeout(r, 1200));
