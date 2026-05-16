@@ -112,11 +112,11 @@ body::before {
     bottom: 50%; /* Starts exactly at the center of the camera and grows UP */
     left: 50%;
     width: 3px; /* Thickness of the stick */
-    height: 28vmin; /* Uses vmin so it grows/shrinks perfectly with the ring */
-    max-height: 220px; /* Keeps it from getting too long on giant monitors */
-    background-color: #ff4500; /* Neon Mars orange/red for high visibility */
+    height: 20vmin; /* Uses vmin so it grows/shrinks perfectly with the ring */
+    max-height: 200px; /* Keeps it from getting too long on giant monitors */
+    background: linear-gradient(to right, #888888, #ffffff 30%, #cccccc 70%, #777777);
     transform: translateX(-50%);
-    box-shadow: 0 0 8px rgba(255, 73, 0, 0.9); /* Sci-fi glow */
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     z-index: -1; /* Puts the stick underneath the camera graphic */
 }
 
