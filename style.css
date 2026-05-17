@@ -130,9 +130,9 @@ body::before {
     position: absolute;
     bottom: 50%; 
     left: 50%;
-    width: 2.5px; 
-    height: 20vmin; /* FIX: Increased from 20vmin to reach out to the hex blocks */
-    max-height: 250px; 
+    width: 2px; 
+    height: 17vmin;
+    max-height: 200px; 
     background: linear-gradient(to right, #888888, #ffffff 30%, #cccccc 70%, #777777);
     transform: translateX(-50%);
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
