@@ -180,7 +180,7 @@ async function playSequence(type) {
         await new Promise(r => setTimeout(r, 1300)); 
     }
     
-    statusText.innerHTML = "DECOMPRESSION SUCCESSFUL<br>BUFFER LOCKED";
+    statusText.innerHTML = "DOWNLINK LOCKED<br>BUFFER READY";
     isPlaying = false;
     buttons.forEach(btn => btn.disabled = false);
 }
