@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pathfinder Communication Relay</title>
+    <title>PATHFINDER TELEMETRY OVERRIDE</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- NEW: Boot screen to bypass browser audio-blocking -->
     <div id="boot-screen" onclick="bootSystem()">
-        <p>INCOMING TRANSMISSION...</p>
-        <p class="blink">[ TAP TO INITIALIZE ]</p>
+        <p>CARRIER SIGNAL DETECTED...</p>
+        <p class="blink">[ INITIALIZE DOWNLINK ]</p>
     </div>
 
     <!-- Empty for the Typewriter effect -->
@@ -33,13 +33,13 @@
 
        <div id="control-panel">
             <div class="controls">
-                <button id="btn-1" onclick="playSequence('msg1')">RECEIVE MESSAGE 1</button>
-                <button id="btn-2" onclick="playSequence('msg2')">RECEIVE MESSAGE 2</button>
-                <button id="btn-3" onclick="playSequence('msg3')">RECEIVE MESSAGE 3</button>
+                <button id="btn-1" onclick="playSequence('msg1')">FETCH DATA BLOCK: 01</button>
+                <button id="btn-2" onclick="playSequence('msg2')">FETCH DATA BLOCK: 02</button>
+                <button id="btn-3" onclick="playSequence('msg3')">FETCH DATA BLOCK: 03</button>
             </div>
 
             <div id="status-container">
-                <p id="status">STANDING BY...</p>
+                <p id="status">LINK IDLE // AWAITING COMMAND</p>
             </div>
         </div>
     </div>
