@@ -110,7 +110,7 @@ async function bootSystem() {
 
     const titleEl = document.getElementById('sol-title');
     const uiContainer = document.getElementById('ui-container');
-    const titleText = "ARES III MISSION - SOL 97<BR>PATHFINDER COMMS RELAY TEST";
+    const titleText = "NASA - ARES III<BR>MISSION LOG: SOL 97<BR>PATHFINDER TELEMETRY OVERRIDE";
     let i = 0;
 
     function typeWriter() {
@@ -139,7 +139,7 @@ async function playSequence(type) {
     
     const buttons = document.querySelectorAll('.controls button');
     buttons.forEach(btn => btn.disabled = true);
-    statusText.innerText = `RECEIVING DATA STREAM...`;
+    statusText.innerText = `DOWNLINKING TELEMETRY...`;
 
     startMotor();
     cumulativeRotation = 0;
@@ -180,7 +180,7 @@ async function playSequence(type) {
         await new Promise(r => setTimeout(r, 1300)); 
     }
     
-    statusText.innerText = "TRANSMISSION COMPLETE";
+    statusText.innerText = "DECOMPRESSION SUCCESSFUL // BUFFER LOCKED";
     isPlaying = false;
     buttons.forEach(btn => btn.disabled = false);
 }
